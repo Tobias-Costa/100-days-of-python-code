@@ -65,7 +65,6 @@ while True:
         print("Sorry! That is not in our menu.")
         continue
 
-
     is_resources_sufficient, resource_lack = check_resources(user_order)
 
     if not is_resources_sufficient:
