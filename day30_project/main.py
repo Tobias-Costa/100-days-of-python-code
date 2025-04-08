@@ -4,7 +4,7 @@ from random import randint, choice, shuffle
 import pyperclip
 import json
 # ---------------------------- SEARCH PASSWORD ------------------------------- #
-def find_passwrod():
+def find_password():
     website = website_entry.get().title()
     try:
         with open("data.json", "r") as data_file:
@@ -102,7 +102,7 @@ password_entry = Entry(width=21)
 password_entry.grid(column=1, row=3, sticky="EW")
 
 # Buttons
-search_button = Button(text="Search", command=find_passwrod)
+search_button = Button(text="Search", command=find_password)
 search_button.grid(column=2, row=1, sticky="EW")
 
 generate_button = Button(text="Generate Password", command=generate_password)
