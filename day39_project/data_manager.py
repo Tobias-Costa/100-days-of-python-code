@@ -15,14 +15,17 @@ class DataManager:
         self._authorization = HTTPBasicAuth(self._user, self._password)
 
     def get_flight_info_sheet(self):
+        # Get and return the data stored in the google sheet
         response = requests.get(url=SHEETY_ENDPOINT, auth=self._authorization)
         response.raise_for_status()
-        data = response.json()["prices"]
-        pprint(data)
-        return data
+
+        data_sheet = response.json()["prices"]
+        pprint(data_sheet)
+
+        return data_sheet
     
-    def update_sheet(self, sheet_data):
-        for row in sheet_data:
+    def update_sheet(self, data_sheet):
+        for row in data_sheet:
 
             update_data = {
                 "price": {

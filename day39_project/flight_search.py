@@ -1,6 +1,5 @@
 import os
 import requests
-import time
 from dotenv import load_dotenv
 
 IATA_ENDPOINT = "https://test.api.amadeus.com/v1/reference-data/locations/cities"
@@ -37,39 +36,32 @@ class FlightSearch:
         header = {
             'Content-Type': 'application/x-www-form-urlencoded'
         }
+
         body = {
             'grant_type': 'client_credentials',
             'client_id': self._api_key,
             'client_secret': self._api_secret
         }
+
         response = requests.post(url=TOKEN_ENDPOINT, headers=header, data=body)
         print(f"Your token is {response.json()['access_token']}")
         print(f"Your token expires in {response.json()['expires_in']} seconds")
         return response.json()["access_token"]
 
-    def get_iata_code(self, sheet_data):
-        for data in sheet_data:
+    def get_iata_code(self, city):
+        """
+        This function takes the name of a city as parameter and returns the IATA code of the corresponding airport through a request to the Amadeus API.
+        Returns:
+            str: IATA code
+        """
 
-            print(f"Using this token to get destination {self._token}")
-            headers = {"Authorization": f"Bearer {self._token}"}
+        print(f"Using this token to get destination {self._token}")
+        headers = {"Authorization": f"Bearer {self._token}"}
 
-            if data["iataCode"] == "":
+        query = {"keyword":city, "max":2, "include": "AIRPORTS"}
+        response = requests.get(url=IATA_ENDPOINT, params=query, headers=headers)
+        print(f"Status code {response.status_code}. Airport IATA: {response.text}")
 
-                city_name = data["city"]
-                query = {"keyword":city_name, "max":2, "include": "AIRPORTS"}
-                response = requests.get(url=IATA_ENDPOINT, params=query, headers=headers)
-                print(f"Status code {response.status_code}. Airport IATA: {response.text}")
+        code = response.json()["data"][0]['iataCode']
 
-                try:
-                    iata_code = response.json()["data"][0]['iataCode']
-                    data["iataCode"] = iata_code
-                except IndexError:
-                    print(f"IndexError: No airport code found for {city_name}.")
-                    data["iataCode"] = "N/A"
-                except KeyError:
-                    print(f"KeyError: No airport code found for {city_name}.")
-                    data["iataCode"] = "N/A"
-
-                time.sleep(2)
-            
-        return sheet_data
+        return code
