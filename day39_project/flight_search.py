@@ -1,6 +1,11 @@
 import os
 import requests
+import datetime
+from pprint import pprint 
 from dotenv import load_dotenv
+
+tomorrow = datetime.datetime.now() + datetime.timedelta(days=1)
+six_months_from_today = datetime.datetime.now() + datetime.timedelta(days=(6*30))
 
 IATA_ENDPOINT = "https://test.api.amadeus.com/v1/reference-data/locations/cities"
 FLIGHT_ENDPOINT = "https://test.api.amadeus.com/v2/shopping/flight-offers"
@@ -65,3 +70,30 @@ class FlightSearch:
         code = response.json()["data"][0]['iataCode']
 
         return code
+    
+    def search_flights(self, destination):
+
+        headers = {"Authorization": f"Bearer {self._token}"}
+
+        query = {
+            "originLocationCode": "LON",
+            "destinationLocationCode": destination,
+            "departureDate": tomorrow.strftime("%Y-%m-%d"),
+            "returnDate": six_months_from_today.strftime("%Y-%m-%d"),
+            "adults": 1,
+            "nonStop": "true",
+            "currencyCode": "GBP",
+            "max": "10"
+        }
+
+        response = requests.get(url=FLIGHT_ENDPOINT, params=query, headers=headers)
+
+        if response.status_code != 200:
+            print("################ ERROR ################")
+            return None
+        
+        return response.json()
+
+
+
+

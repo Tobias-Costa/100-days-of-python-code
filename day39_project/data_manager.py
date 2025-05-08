@@ -20,7 +20,6 @@ class DataManager:
         response.raise_for_status()
 
         data_sheet = response.json()["prices"]
-        pprint(data_sheet)
 
         return data_sheet
     
