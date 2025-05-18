@@ -1,7 +1,5 @@
 import requests
-import html
 from bs4 import BeautifulSoup
-from pprint import pprint
 
 URL = "https://web.archive.org/web/20200518073855/https://www.empireonline.com/movies/features/best-movies-2/"
 
@@ -13,7 +11,7 @@ response = requests.get(URL)
 response.raise_for_status()
 
 soup = BeautifulSoup(response.text, "html.parser")
-movies_list = [ html.unescape(movie.getText()) for movie in soup.find_all(name="h3") ]
+movies_list = [ movie.getText() for movie in soup.find_all(name="h3", class_="title") ]
 
 for movie in reversed(movies_list):
     save_file(movie)
