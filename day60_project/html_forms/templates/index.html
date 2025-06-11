@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>It's working!</h1>
+    <form action="/login" method="post">
+        <!-- Depending on where your server is hosted, the "/login" path may change. So it's usually a better idea to use url_for to dynamically generate the url for a particular function in your Flask server. -->
+        <label for="username">Name</label>
+        <input type="text" placeholder="name" name="username">
+        <label for="password">Password</label>
+        <input type="password" placeholder="password" name="password">
+        <button type="submit">Ok</button>
+    </form>
+</body>
+</html>
